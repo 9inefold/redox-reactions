@@ -175,28 +175,6 @@ async function getEquation(): Promise<Redox> {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-function handleEquation2(equation: Redox) {
-  const oxStates = getOxidationStates;
-  const runLewis = calculateLewisStructure2;
-
-  for (const molecule of equation.lhs) {
-    console.log();
-    const states = oxStates(molecule);
-    if (states !== undefined) continue;
-    //console.log(`For ${molecule.text}: `, JSON.stringify(states));
-    const lewis = runLewis(molecule);
-    printLewisStructure(lewis);
-  }
-  for (const molecule of equation.rhs) {
-    console.log();
-    const states = oxStates(molecule);
-    if (states !== undefined) continue;
-    //console.log(`For ${molecule.text}: `, JSON.stringify(states));
-    const lewis = runLewis(molecule);
-    printLewisStructure(lewis);
-  }
-}
-
 // From https://gist.github.com/bellbind/5468385accdee9df0d88
 function gcd(a: number, b: number): number {
   // fast GCD aka Binary GCD
@@ -433,7 +411,7 @@ async function handleEquation() {
   //console.log('Equation');
   const equation = await getEquation();
   //console.log("\nParsing equation...");
-  
+  handleRedox(equation);
   console.log();
 }
 
@@ -449,8 +427,6 @@ function runTests() {
   };
 
   // Cr2O7^2- + HNO2 -> Cr^3+ + NO3^-
-
-  
 
   test('Cr2O7{2-} + HNO2 -> Cr{3+} + NO3{-}');
   test('Cu + NO3{-} -> Cu{2+} + NO2');
@@ -474,7 +450,7 @@ async function main() {
   function testMolecules(eq: string) {
     console.log(eq, ":");
     try {
-      handleEquation2(parse(eq));
+      //handleEquation2(parse(eq));
     } catch (e) {
       console.error(e);
     }
@@ -488,7 +464,7 @@ async function main() {
   //testMolecules('C6H5C(O)Cl + KSH -> C6H5C(O)SH + KCl')
   //testMolecules('CH3SH + I2 -> CH3SSCH3 + HI')
 
-  runTests();
+  //runTests();
 
   console.log('Welcome to the redox equation balancer!');
   while (true) {
